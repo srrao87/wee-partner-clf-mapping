@@ -1,4 +1,3 @@
-  state,csv_district,geojson_district
   Assam,Darrang,Darrang
   Assam,Kamrup,Kamrup
   Assam,Nagaon,Nagaon
@@ -17,7 +16,7 @@
   Bihar,Gopalganj,Gopalganj
   Bihar,Jamui,Jamui
   Bihar,Jehanabad,Jehanabad
-  Bihar,Kaimur (Bhabua),Kaimur
+  Bihar,Kaimur,Kaimur
   Bihar,Katihar,Katihar
   Bihar,Khagaria,Khagaria
   Bihar,Kishanganj,Kishanganj
@@ -28,9 +27,9 @@
   Bihar,Muzaffarpur,Muzaffarpur
   Bihar,Nalanda,Nalanda
   Bihar,Nawada,Nawada
-  Bihar,Pashchim Champaran,West Champaran
+  Bihar,West Champaran,West Champaran
   Bihar,Patna,Patna
-  Bihar,Purbi Champaran,East Champaran
+  Bihar,East Champaran,East Champaran
   Bihar,Purnia,Purnia
   Bihar,Rohtas,Rohtas
   Bihar,Saharsa,Saharsa
@@ -42,45 +41,45 @@
   Bihar,Siwan,Siwan
   Bihar,Supaul,Supaul
   Bihar,Vaishali,Vaishali
-  Chhattisgarh,Balod,Durg
-  Chhattisgarh,Baloda Bazar,Raipur
-  Chhattisgarh,Balrampur,Surguja
+  Chhattisgarh,Balod,Balod
+  Chhattisgarh,Baloda Bazar,Baloda Bazar
+  Chhattisgarh,Balrampur,Balrampur
   Chhattisgarh,Bastar,Bastar
-  Chhattisgarh,Bemetara,Durg
+  Chhattisgarh,Bemetara,Bemetara
   Chhattisgarh,Bijapur,Bijapur
   Chhattisgarh,Bilaspur,Bilaspur
-  Chhattisgarh,Dantewada,Dakshin Bastar Dantewada
+  Chhattisgarh,Dantewada,Dantewada
   Chhattisgarh,Dhamtari,Dhamtari
   Chhattisgarh,Durg,Durg
-  Chhattisgarh,Gariaband,Raipur
-  Chhattisgarh,Gaurella Pendra Marwahi,Bilaspur
-  Chhattisgarh,Janjgir Champa,Janjgir-champa
+  Chhattisgarh,Gariaband,Gariaband
+  Chhattisgarh,Gaurella Pendra Marwahi,Gaurella Pendra Marwahi
+  Chhattisgarh,Janjgir Champa,Janjgir Champa
   Chhattisgarh,Jashpur,Jashpur
-  Chhattisgarh,Kanker,Uttar Bastar Kanker
-  Chhattisgarh,Kabirdham,Kabeerdham
-  Chhattisgarh,Khairagarh-Chhuikhadan-Gandai,Rajnandgaon
-  Chhattisgarh,Kondagaon,Bastar
+  Chhattisgarh,Kanker,Kanker
+  Chhattisgarh,Kabirdham,Kabirdham
+  Chhattisgarh,Khairagarh-Chhuikhadan-Gandai,Khairagarh-Chhuikhadan-Gandai
+  Chhattisgarh,Kondagaon,Kondagaon
   Chhattisgarh,Korba,Korba
   Chhattisgarh,Koriya,Koriya
   Chhattisgarh,Mahasamund,Mahasamund
-  Chhattisgarh,Manendragarh-Chirmiri-Bharatpur,Koriya
-  Chhattisgarh,Mohla-Manpur-Ambagarh Chowki,Rajnandgaon
-  Chhattisgarh,Mungeli,Bilaspur
+  Chhattisgarh,Manendragarh-Chirmiri-Bharatpur,Manendragarh-Chirmiri-Bharatpur
+  Chhattisgarh,Mohla-Manpur-Ambagarh Chowki,Mohla-Manpur-Ambagarh Chowki
+  Chhattisgarh,Mungeli,Mungeli
   Chhattisgarh,Narayanpur,Narayanpur
   Chhattisgarh,Raigarh,Raigarh
   Chhattisgarh,Raipur,Raipur
   Chhattisgarh,Rajnandgaon,Rajnandgaon
-  Chhattisgarh,Sakti,Janjgir-champa
-  Chhattisgarh,Sarangarh-Bilaigarh,Raigarh
-  Chhattisgarh,Sukma,Dakshin Bastar Dantewada
-  Chhattisgarh,Surajpur,Surguja
+  Chhattisgarh,Sakti,Sakti
+  Chhattisgarh,Sarangarh-Bilaigarh,Sarangarh-Bilaigarh
+  Chhattisgarh,Sukma,Sukma
+  Chhattisgarh,Surajpur,Surajpur
   Chhattisgarh,Surguja,Surguja
   Jharkhand,Bokaro,Bokaro
   Jharkhand,Chatra,Chatra
   Jharkhand,Deoghar,Deoghar
   Jharkhand,Dhanbad,Dhanbad
   Jharkhand,Dumka,Dumka
-  Jharkhand,East Singhbum,East Singhbhum
+  Jharkhand,East Singhbhum,East Singhbhum
   Jharkhand,Garhwa,Garhwa
   Jharkhand,Giridih,Giridih
   Jharkhand,Godda,Godda
@@ -95,14 +94,14 @@
   Jharkhand,Palamu,Palamu
   Jharkhand,Ramgarh,Ramgarh
   Jharkhand,Ranchi,Ranchi
-  Jharkhand,Sahebganj,Sahibganj
-  Jharkhand,Saraikela Kharsawan,Saraikela-kharsawan
+  Jharkhand,Sahibganj,Sahibganj
+  Jharkhand,Saraikela-Kharsawan,Saraikela-Kharsawan
   Jharkhand,Simdega,Simdega
   Jharkhand,West Singhbhum,West Singhbhum
-  Madhya Pradesh,Agar Malwa,Shajapur
+  Madhya Pradesh,Agar Malwa,Agar Malwa
   Madhya Pradesh,Alirajpur,Alirajpur
   Madhya Pradesh,Anuppur,Anuppur
-  Madhya Pradesh,Ashok Nagar,Ashoknagar
+  Madhya Pradesh,Ashok Nagar,Ashok Nagar
   Madhya Pradesh,Balaghat,Balaghat
   Madhya Pradesh,Barwani,Barwani
   Madhya Pradesh,Betul,Betul
@@ -123,18 +122,18 @@
   Madhya Pradesh,Jabalpur,Jabalpur
   Madhya Pradesh,Jhabua,Jhabua
   Madhya Pradesh,Katni,Katni
-  Madhya Pradesh,Khandwa,East Nimar
-  Madhya Pradesh,Khargone,West Nimar
-  Madhya Pradesh,Maihar,Satna
+  Madhya Pradesh,Khandwa,Khandwa
+  Madhya Pradesh,Khargone,Khargone
+  Madhya Pradesh,Maihar,Maihar
   Madhya Pradesh,Mandla,Mandla
   Madhya Pradesh,Mandsaur,Mandsaur
-  Madhya Pradesh,Mauganj,Rewa
+  Madhya Pradesh,Mauganj,Mauganj
   Madhya Pradesh,Morena,Morena
-  Madhya Pradesh,Narmadapuram,Hoshangabad
-  Madhya Pradesh,Narsinghpur,Narsimhapur
+  Madhya Pradesh,Narmadapuram,Narmadapuram
+  Madhya Pradesh,Narsinghpur,Narsinghpur
   Madhya Pradesh,Neemuch,Neemuch
-  Madhya Pradesh,Niwari,Tikamgarh
-  Madhya Pradesh,Pandhurna,Chhindwara
+  Madhya Pradesh,Niwari,Niwari
+  Madhya Pradesh,Pandhurna,Pandhurna
   Madhya Pradesh,Panna,Panna
   Madhya Pradesh,Raisen,Raisen
   Madhya Pradesh,Rajgarh,Rajgarh
@@ -154,10 +153,10 @@
   Madhya Pradesh,Ujjain,Ujjain
   Madhya Pradesh,Umaria,Umaria
   Madhya Pradesh,Vidisha,Vidisha
-  Odisha,Angul,Anugul
+  Odisha,Angul,Angul
   Odisha,Bargarh,Bargarh
   Odisha,Balangir,Balangir
-  Odisha,Deogarh,Debagarh
+  Odisha,Deogarh,Deogarh
   Odisha,Gajapati,Gajapati
   Odisha,Ganjam,Ganjam
   Odisha,Kalahandi,Kalahandi
@@ -169,17 +168,17 @@
   Uttar Pradesh,Agra,Agra
   Uttar Pradesh,Aligarh,Aligarh
   Uttar Pradesh,Ambedkar Nagar,Ambedkar Nagar
-  Uttar Pradesh,Amethi,Sultanpur
-  Uttar Pradesh,Amroha,Jyotiba Phule Nagar
+  Uttar Pradesh,Amethi,Amethi
+  Uttar Pradesh,Amroha,Amroha
   Uttar Pradesh,Auraiya,Auraiya
-  Uttar Pradesh,Ayodhya,Faizabad
+  Uttar Pradesh,Ayodhya,Ayodhya
   Uttar Pradesh,Azamgarh,Azamgarh
   Uttar Pradesh,Baghpat,Baghpat
   Uttar Pradesh,Bahraich,Bahraich
   Uttar Pradesh,Ballia,Ballia
   Uttar Pradesh,Balrampur,Balrampur
   Uttar Pradesh,Banda,Banda
-  Uttar Pradesh,Barabanki,Bara Banki
+  Uttar Pradesh,Barabanki,Barabanki
   Uttar Pradesh,Bareilly,Bareilly
   Uttar Pradesh,Basti,Basti
   Uttar Pradesh,Bijnor,Bijnor
@@ -199,18 +198,18 @@
   Uttar Pradesh,Gonda,Gonda
   Uttar Pradesh,Gorakhpur,Gorakhpur
   Uttar Pradesh,Hamirpur,Hamirpur
-  Uttar Pradesh,Hapur,Ghaziabad
+  Uttar Pradesh,Hapur,Hapur
   Uttar Pradesh,Hardoi,Hardoi
-  Uttar Pradesh,Hathras,Mahamaya Nagar
+  Uttar Pradesh,Hathras,Hathras
   Uttar Pradesh,Jalaun,Jalaun
   Uttar Pradesh,Jaunpur,Jaunpur
   Uttar Pradesh,Jhansi,Jhansi
   Uttar Pradesh,Kannauj,Kannauj
   Uttar Pradesh,Kanpur Dehat,Kanpur Dehat
   Uttar Pradesh,Kanpur Nagar,Kanpur Nagar
-  Uttar Pradesh,Kasganj,Kansiram Nagar
+  Uttar Pradesh,Kasganj,Kasganj
   Uttar Pradesh,Kaushambi,Kaushambi
-  Uttar Pradesh,Lakhimpur Kheri,Kheri
+  Uttar Pradesh,Lakhimpur Kheri,Lakhimpur Kheri
   Uttar Pradesh,Kushinagar,Kushinagar
   Uttar Pradesh,Lalitpur,Lalitpur
   Uttar Pradesh,Lucknow,Lucknow
@@ -225,17 +224,17 @@
   Uttar Pradesh,Muzaffarnagar,Muzaffarnagar
   Uttar Pradesh,Pilibhit,Pilibhit
   Uttar Pradesh,Pratapgarh,Pratapgarh
-  Uttar Pradesh,Prayagraj,Allahabad
+  Uttar Pradesh,Prayagraj,Prayagraj
   Uttar Pradesh,Rae Bareli,Rae Bareli
   Uttar Pradesh,Rampur,Rampur
   Uttar Pradesh,Saharanpur,Saharanpur
-  Uttar Pradesh,Sambhal,Moradabad
+  Uttar Pradesh,Sambhal,Sambhal
   Uttar Pradesh,Sant Kabir Nagar,Sant Kabir Nagar
-  Uttar Pradesh,Bhadohi,Sant Ravi Das Nagar(bhadohi)
+  Uttar Pradesh,Bhadohi,Bhadohi
   Uttar Pradesh,Shahjahanpur,Shahjahanpur
-  Uttar Pradesh,Shamli,Muzaffarnagar
-  Uttar Pradesh,Shravasti,Shrawasti
-  Uttar Pradesh,Siddharthnagar,Siddharth Nagar
+  Uttar Pradesh,Shamli,Shamli
+  Uttar Pradesh,Shravasti,Shravasti
+  Uttar Pradesh,Siddharthnagar,Siddharthnagar
   Uttar Pradesh,Sitapur,Sitapur
   Uttar Pradesh,Sonbhadra,Sonbhadra
   Uttar Pradesh,Sultanpur,Sultanpur
