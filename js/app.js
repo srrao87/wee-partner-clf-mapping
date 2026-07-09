@@ -328,7 +328,7 @@ function renderStateView(stateSlug) {
     createKpiCard({
       label: "Engaged CLFs",
       value: engagedClfsInView,
-      meta: `${formatNumber(Math.max(0, totalClfsInView - engagedClfsInView))} not engaged in current view`,
+      meta: `${formatNumber(Math.max(0, totalClfsInView - engagedClfsInView))} not engaged`,
       filtered: filterApplied,
     }),
     createKpiCard({
@@ -337,9 +337,9 @@ function renderStateView(stateSlug) {
       filtered: filterApplied,
     }),
     createKpiCard({
-      label: "CLF Hotspots",
+      label: "Shared CLFs",
       value: hotspotCount,
-      meta: "CLFs with two or more partner organizations",
+      meta: "CLFs linked to two or more partner organizations",
       filtered: filterApplied,
     }),
   ].join("");
@@ -387,11 +387,11 @@ function renderStateView(stateSlug) {
             selectedDistrict === item.district
           }">
             <strong>${item.district}</strong>
-            <div class="hotspot-meta">${formatNumber(item.hotspots)} Shared CLFs | ${formatNumber(item.hotspotPartners)} Partners</div>
+            <div class="hotspot-meta">${formatNumber(item.hotspots)} shared CLFs | ${formatNumber(item.hotspotPartners)} partners</div>
           </button>`
         )
         .join("")
-    : `<div class="empty-state-card">No shared CLFs found for the current selection.</div>`;
+    : `<div class="empty-state-card">No CLFs are currently shared across multiple partners for this selection.</div>`;
 
   els.hotspotList.querySelectorAll("[data-district]").forEach((button) => {
     button.addEventListener("click", () => {
@@ -410,11 +410,11 @@ function renderStateView(stateSlug) {
           }">
             <strong>${item.clfName}</strong>
             <div class="shared-clf-meta">District: ${item.district}</div>
-            <div class="shared-clf-meta">Partners: ${item.partners.join(", ")}</div>
+            <div class="shared-clf-meta">Mapped partners: ${item.partners.join(", ")}</div>
           </button>`
         )
         .join("")
-    : `<div class="empty-state-card">No shared CLFs found for the current selection.</div>`;
+    : `<div class="empty-state-card">No CLFs are currently shared across multiple partners for this selection.</div>`;
 
   els.sharedDirectory.querySelectorAll("[data-clf]").forEach((button) => {
     button.addEventListener("click", () => {
@@ -534,8 +534,8 @@ function renderStateView(stateSlug) {
   });
 
   els.stateKpiNote.textContent = selectedPartner
-    ? `Partner focus: ${selectedPartner}. The first map shades districts by the number of CLFs engaged with this partner, while district totals still show the full CLF base.`
-    : "The first map shades districts by engaged CLFs. Use the tooltip or district details to compare engaged, total, and not engaged CLFs.";
+    ? `Partner focus: ${selectedPartner}. The first map shows how many CLFs are linked to this partner in each district, while district totals still reflect the full CLF base.`
+    : "The first map shows engaged CLFs by district. The second map shows total CLFs by district. Tooltips and district details compare engaged, total, and not engaged CLFs.";
 
 }
 
