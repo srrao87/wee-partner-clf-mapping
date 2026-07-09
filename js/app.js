@@ -270,6 +270,8 @@ function buildDistrictStats(rows, hotspotRows = []) {
   return allDistricts.map((district) => {
     const districtRows = rows.filter((row) => row.district === district);
     const partnerRows = rowsWithPartners(districtRows);
+    const totalClfs = countUniqueClfs(districtRows);
+    const engagedClfs = countUniqueClfs(partnerRows);
     const hotspotClfKeys = new Set(
       hotspotRows.filter((item) => item.district === district).map((item) => item.clfKey)
     );
@@ -281,7 +283,10 @@ function buildDistrictStats(rows, hotspotRows = []) {
     return {
       district,
       activePartners: new Set(partnerRows.map((row) => row.partner_organization)).size,
-      clfs: countUniqueClfs(districtRows),
+      clfs: totalClfs,
+      totalClfs,
+      engagedClfs,
+      notEngagedClfs: Math.max(0, totalClfs - engagedClfs),
       hotspots: hotspotClfKeys.size,
       hotspotPartners: hotspotPartners.size,
     };
@@ -306,6 +311,8 @@ function renderStateView(stateSlug) {
 
   const hotspotCount = sharedClfs.length;
   const activePartnerRows = rowsWithPartners(baseRows);
+  const totalClfsInView = countUniqueClfs(baseRows);
+  const engagedClfsInView = countUniqueClfs(activePartnerRows);
 
   els.stateKpis.innerHTML = [
     createKpiCard({
@@ -319,8 +326,14 @@ function renderStateView(stateSlug) {
       filtered: filterApplied,
     }),
     createKpiCard({
+      label: "Engaged CLFs",
+      value: engagedClfsInView,
+      meta: `${formatNumber(Math.max(0, totalClfsInView - engagedClfsInView))} not engaged in current view`,
+      filtered: filterApplied,
+    }),
+    createKpiCard({
       label: CLF_SCOPE_LABELS[stateMeta.clf_data_scope],
-      value: countUniqueClfs(baseRows),
+      value: totalClfsInView,
       filtered: filterApplied,
     }),
     createKpiCard({
@@ -443,12 +456,18 @@ function renderStateView(stateSlug) {
     )} districts.`;
   } else if (selectedDistrict) {
     const districtRows = baseRows.filter((row) => row.district === selectedDistrict);
+    const districtTotalClfs = countUniqueClfs(districtRows);
+    const districtEngagedClfs = countUniqueClfs(rowsWithPartners(districtRows));
     els.districtSummary.className = "district-summary";
     els.districtSummary.textContent = `${selectedDistrict} | ${formatNumber(
-      countUniqueClfs(districtRows)
-    )} CLFs | ${formatNumber(
+      districtEngagedClfs
+    )} engaged CLFs | ${formatNumber(
+      districtTotalClfs
+    )} total CLFs | ${formatNumber(
+      Math.max(0, districtTotalClfs - districtEngagedClfs)
+    )} not engaged | ${formatNumber(
       new Set(rowsWithPartners(districtRows).map((row) => row.partner_organization)).size
-    )} Active Partners${filterApplied ? " | Filtered view" : ""}`;
+    )} active partners${filterApplied ? " | Filtered view" : ""}`;
   } else {
     els.districtSummary.className = "district-summary empty-state";
     els.districtSummary.textContent =
@@ -460,7 +479,27 @@ function renderStateView(stateSlug) {
   const geoMapRows = selectedPartner
     ? baseRows.filter((row) => row.partner_organization === selectedPartner)
     : baseRows;
-  const geoDistrictStats = buildDistrictStats(geoMapRows, sharedClfs);
+  const focusedGeoDistrictStats = selectedPartner
+    ? new Map(
+        buildDistrictStats(geoMapRows, sharedClfs).map((item) => [item.district, item])
+      )
+    : null;
+  const geoDistrictStats = selectedPartner
+    ? districtStats.map((districtItem) => {
+        const focusedDistrict = focusedGeoDistrictStats.get(districtItem.district);
+        return focusedDistrict
+          ? {
+              ...districtItem,
+              engagedClfs: focusedDistrict.engagedClfs,
+              notEngagedClfs: Math.max(
+                0,
+                districtItem.totalClfs - focusedDistrict.engagedClfs
+              ),
+              activePartners: focusedDistrict.activePartners,
+            }
+          : districtItem;
+      })
+    : districtStats;
 
   renderStateDistrictMap({
     slug: stateSlug,
@@ -493,6 +532,10 @@ function renderStateView(stateSlug) {
     },
     messageTarget: els.clfMapMessage,
   });
+
+  els.stateKpiNote.textContent = selectedPartner
+    ? `Partner focus: ${selectedPartner}. The first map shades districts by the number of CLFs engaged with this partner, while district totals still show the full CLF base.`
+    : "The first map shades districts by engaged CLFs. Use the tooltip or district details to compare engaged, total, and not engaged CLFs.";
 
 }
 
