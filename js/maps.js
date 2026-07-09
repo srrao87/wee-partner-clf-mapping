@@ -275,7 +275,7 @@ export async function renderStateDistrictMap({
       fillAccessor: (feature) => {
         const districtName = getDistrictNameFromFeature(feature);
         const stat = statByGeoDistrict.get(districtName);
-        const value = mapType === "partner" ? stat?.activePartners || 0 : stat?.clfs || 0;
+        const value = mapType === "partner" ? stat?.engagedClfs || 0 : stat?.clfs || 0;
         return colorByBuckets(
           value,
           mapType === "partner" ? PARTNER_BUCKETS : CLF_CONCENTRATION_BUCKETS,
@@ -303,12 +303,21 @@ export async function renderStateDistrictMap({
       tooltipAccessor: (feature) => {
         const districtName = getDistrictNameFromFeature(feature);
         const stat = statByGeoDistrict.get(districtName);
+        const engagedValue = stat?.engagedClfs || 0;
+        const totalValue = stat?.totalClfs ?? stat?.clfs ?? 0;
+        const notEngagedValue = stat?.notEngagedClfs ?? Math.max(0, totalValue - engagedValue);
         if (mapType === "partner") {
-          return `<strong>${districtName}</strong><br>Active Partners: ${formatNumber(
-            stat?.activePartners || 0
-          )}`;
+          return `<strong>${districtName}</strong><br>Engaged CLFs: ${formatNumber(
+            engagedValue
+          )}<br>Total CLFs: ${formatNumber(totalValue)}<br>Not Engaged CLFs: ${formatNumber(
+            notEngagedValue
+          )}<br>Active Partners: ${formatNumber(stat?.activePartners || 0)}`;
         }
-        return `<strong>${districtName}</strong><br>CLFs: ${formatNumber(stat?.clfs || 0)}`;
+        return `<strong>${districtName}</strong><br>Total CLFs: ${formatNumber(
+          totalValue
+        )}<br>Engaged CLFs: ${formatNumber(engagedValue)}<br>Not Engaged CLFs: ${formatNumber(
+          notEngagedValue
+        )}`;
       },
       clickAccessor: (feature) => {
         const districtName = getDistrictNameFromFeature(feature);
@@ -321,7 +330,7 @@ export async function renderStateDistrictMap({
 
     renderLegend(
       container,
-      mapType === "partner" ? "Active partners" : "CLF concentration",
+      mapType === "partner" ? "Engaged CLFs" : "Total CLFs",
       mapType === "partner" ? PARTNER_BUCKETS : CLF_CONCENTRATION_BUCKETS
     );
   } catch (error) {
