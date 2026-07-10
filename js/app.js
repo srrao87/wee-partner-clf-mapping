@@ -352,7 +352,7 @@ function renderStateView(stateSlug) {
       districts: new Set(partnerRows.map((row) => row.district)).size,
       clfs: countUniqueClfs(partnerRows),
     }))
-    .sort((a, b) => a.partner.localeCompare(b.partner));
+   .sort((a, b) => b.clfs - a.clfs || b.districts - a.districts || a.partner.localeCompare(b.partner));
 
   els.partnerDirectory.innerHTML = partnerDirectoryRows.length
     ? partnerDirectoryRows
