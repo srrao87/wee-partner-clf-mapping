@@ -353,8 +353,9 @@ function renderStateView(stateSlug) {
 
   els.stateKpiNote.textContent = "";
   const hotspotDistricts = districtStats
-    .filter((item) => item.hotspots > 0)
-    .sort((a, b) => b.hotspots - a.hotspots || a.district.localeCompare(b.district));
+    .filter((item) => item.engagedClfs > 0)
+    .sort((a, b) => b.engagedClfs - a.engagedClfs || a.district.localeCompare(b.district))
+    .slice(0, districtStats.length >= 10 ? 10 : 5);
 
   els.hotspotList.innerHTML = hotspotDistricts.length
     ? hotspotDistricts
@@ -364,11 +365,11 @@ function renderStateView(stateSlug) {
             selectedDistrict === item.district
           }">
             <strong>${item.district}</strong>
-            <div class="hotspot-meta">${formatNumber(item.hotspots)} hotspot CLFs | ${formatNumber(item.hotspotPartners)} partners</div>
+            <div class="hotspot-meta">${formatNumber(item.engagedClfs)} engaged CLFs | ${formatNumber(item.hotspots)} hotspot CLFs</div>
           </button>`
         )
         .join("")
-    : `<div class="empty-state-card">No CLFs with three or more partners are present for this selection.</div>`;
+    : `<div class="empty-state-card">No engaged CLFs are present for this selection.</div>`;
 
   els.hotspotList.querySelectorAll("[data-district]").forEach((button) => {
     button.addEventListener("click", () => {
