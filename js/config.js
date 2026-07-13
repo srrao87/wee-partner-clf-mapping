@@ -77,11 +77,11 @@ export const ENGAGEMENT_SHARE_BUCKETS = [
 ];
 
 export const PARTNER_BUCKETS = [
-  { label: "No active partner in dataset", min: 0, max: 0, color: MAP_COLORS.geoReach[0] },
-  { label: "1 Partner", min: 1, max: 1, color: MAP_COLORS.geoReach[1] },
-  { label: "2 Partners", min: 2, max: 2, color: MAP_COLORS.geoReach[2] },
-  { label: "3 Partners", min: 3, max: 3, color: MAP_COLORS.geoReach[3] },
-  { label: "4+ Partners", min: 4, max: Infinity, color: MAP_COLORS.geoReach[4] },
+  { label: "No active partner in dataset", min: 0, max: 0, color: MAP_COLORS.clfReach[0] },
+  { label: "1 Partner", min: 1, max: 1, color: MAP_COLORS.clfReach[1] },
+  { label: "2 Partners", min: 2, max: 2, color: MAP_COLORS.clfReach[2] },
+  { label: "3 Partners", min: 3, max: 3, color: MAP_COLORS.clfReach[3] },
+  { label: "4+ Partners", min: 4, max: Infinity, color: MAP_COLORS.clfReach[4] },
 ];
 
 export const REQUIRED_STATE_COLUMNS = [
