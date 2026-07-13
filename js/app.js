@@ -34,6 +34,7 @@ import {
 } from "./tables.js";
 import {
   cleanCsvValue,
+  canonicalizePartnerName,
   debounce,
   displayBlock,
   displayClfName,
@@ -42,7 +43,6 @@ import {
   formatNumber,
   groupBy,
   hasActiveFilters,
-  normalizeString,
   sortAlpha,
   uniqueValues,
 } from "./utils.js";
@@ -85,9 +85,8 @@ function rowsWithPartners(rows) {
 function countUniquePartners(rows) {
   return new Set(
     rows
-      .map((row) => cleanCsvValue(row.partner_organization))
+      .map((row) => canonicalizePartnerName(row.partner_organization))
       .filter(Boolean)
-      .map((value) => normalizeString(value))
   ).size;
 }
 
