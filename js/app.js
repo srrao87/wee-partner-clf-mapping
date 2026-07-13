@@ -40,6 +40,7 @@ import {
   displayPartner,
   displayProject,
   formatNumber,
+  formatPercent,
   groupBy,
   hasActiveFilters,
   sortAlpha,
@@ -99,11 +100,11 @@ function getStateSummaryRows(allRows, metadata) {
   });
 }
 
-function createKpiCard({ label, value, meta = "", filtered = false }) {
+function createKpiCard({ label, value, displayValue = "", meta = "", filtered = false }) {
   return `
     <article class="kpi-card">
       <div class="label">${label}</div>
-      <div class="value">${formatNumber(value)}</div>
+      <div class="value">${displayValue || formatNumber(value)}</div>
       ${meta ? `<div class="meta">${meta}</div>` : ""}
       ${filtered ? `<div class="filtered-pill">Filtered view</div>` : ""}
     </article>
@@ -248,7 +249,7 @@ function renderFilterBar(stateSlug, stateRows) {
   });
 }
 
-function getSharedClfGroups(rows) {
+function getSharedClfGroups(rows, minimumPartners = 2) {
   const grouped = groupBy(rows, (row) => row.clf_key);
   return [...grouped.entries()]
     .map(([clfKey, clfRows]) => {
@@ -261,11 +262,11 @@ function getSharedClfGroups(rows) {
         rows: clfRows,
       };
     })
-    .filter((item) => item.partners.length >= 2)
+    .filter((item) => item.partners.length >= minimumPartners)
     .sort((a, b) => a.clfName.localeCompare(b.clfName));
 }
 
-function buildDistrictStats(rows, hotspotRows = []) {
+function buildDistrictStats(rows, hotspotRows = [], stateTotalClfs = countUniqueClfs(rows)) {
   const allDistricts = sortAlpha(uniqueValues(rows, (row) => row.district));
   return allDistricts.map((district) => {
     const districtRows = rows.filter((row) => row.district === district);
@@ -286,6 +287,7 @@ function buildDistrictStats(rows, hotspotRows = []) {
       clfs: totalClfs,
       totalClfs,
       engagedClfs,
+      engagementShare: stateTotalClfs ? engagedClfs / stateTotalClfs : 0,
       notEngagedClfs: Math.max(0, totalClfs - engagedClfs),
       hotspots: hotspotClfKeys.size,
       hotspotPartners: hotspotPartners.size,
@@ -298,21 +300,22 @@ function renderStateView(stateSlug) {
   const stateRows = dashboardData.rowsByState[stateSlug] || [];
   const baseRows = applyBaseFilters(stateRows, stateSlug);
   const focusedRows = applyDistrictDetailFocus(baseRows, stateSlug);
-  const sharedClfs = getSharedClfGroups(baseRows);
-  const districtStats = buildDistrictStats(baseRows, sharedClfs);
   const selectedDistrict = getSelectedDistrict(stateSlug);
   const selectedPartner = getSelectedPartner(stateSlug);
   const selectedClf = getSelectedClf(stateSlug);
   const filterApplied = hasFilterSelection(stateSlug);
+  const activePartnerRows = rowsWithPartners(baseRows);
+  const totalClfsInView = countUniqueClfs(baseRows);
+  const engagedClfsInView = countUniqueClfs(activePartnerRows);
+  const engagementRate = totalClfsInView ? engagedClfsInView / totalClfsInView : 0;
+  const hotspotClfs = getSharedClfGroups(baseRows, 3);
+  const districtStats = buildDistrictStats(baseRows, hotspotClfs, totalClfsInView);
 
   els.statePageTitle.textContent = stateMeta.state;
   els.stateCoverageNote.textContent = "";
   renderFilterBar(stateSlug, stateRows);
 
-  const hotspotCount = sharedClfs.length;
-  const activePartnerRows = rowsWithPartners(baseRows);
-  const totalClfsInView = countUniqueClfs(baseRows);
-  const engagedClfsInView = countUniqueClfs(activePartnerRows);
+  const hotspotCount = hotspotClfs.length;
 
   els.stateKpis.innerHTML = [
     createKpiCard({
@@ -326,9 +329,10 @@ function renderStateView(stateSlug) {
       filtered: filterApplied,
     }),
     createKpiCard({
-      label: "Engaged CLFs",
-      value: engagedClfsInView,
-      meta: `${formatNumber(Math.max(0, totalClfsInView - engagedClfsInView))} not engaged`,
+      label: "CLF Engagement Rate",
+      value: engagementRate,
+      displayValue: formatPercent(engagementRate, 1),
+      meta: `${formatNumber(engagedClfsInView)} of ${formatNumber(totalClfsInView)} CLFs engaged`,
       filtered: filterApplied,
     }),
     createKpiCard({
@@ -337,9 +341,9 @@ function renderStateView(stateSlug) {
       filtered: filterApplied,
     }),
     createKpiCard({
-      label: "Shared CLFs",
+      label: "3+ Partner CLF Hotspots",
       value: hotspotCount,
-      meta: "CLFs linked to two or more partner organizations",
+      meta: "CLFs linked to three or more partner organizations",
       filtered: filterApplied,
     }),
   ].join("");
@@ -352,7 +356,7 @@ function renderStateView(stateSlug) {
       districts: new Set(partnerRows.map((row) => row.district)).size,
       clfs: countUniqueClfs(partnerRows),
     }))
-   .sort((a, b) => b.clfs - a.clfs || b.districts - a.districts || a.partner.localeCompare(b.partner));
+    .sort((a, b) => a.partner.localeCompare(b.partner));
 
   els.partnerDirectory.innerHTML = partnerDirectoryRows.length
     ? partnerDirectoryRows
@@ -387,11 +391,11 @@ function renderStateView(stateSlug) {
             selectedDistrict === item.district
           }">
             <strong>${item.district}</strong>
-            <div class="hotspot-meta">${formatNumber(item.hotspots)} shared CLFs | ${formatNumber(item.hotspotPartners)} partners</div>
+            <div class="hotspot-meta">${formatNumber(item.hotspots)} hotspot CLFs | ${formatNumber(item.hotspotPartners)} partners</div>
           </button>`
         )
         .join("")
-    : `<div class="empty-state-card">No CLFs are currently shared across multiple partners for this selection.</div>`;
+    : `<div class="empty-state-card">No CLFs with three or more partners are present for this selection.</div>`;
 
   els.hotspotList.querySelectorAll("[data-district]").forEach((button) => {
     button.addEventListener("click", () => {
@@ -401,8 +405,8 @@ function renderStateView(stateSlug) {
     });
   });
 
-  els.sharedDirectory.innerHTML = sharedClfs.length
-    ? sharedClfs
+  els.sharedDirectory.innerHTML = hotspotClfs.length
+    ? hotspotClfs
         .map(
           (item) => `
           <button class="shared-clf-item ${selectedClf === item.clfKey ? "active" : ""}" type="button" data-clf="${item.clfKey}" data-district="${item.district}" aria-pressed="${
@@ -410,11 +414,11 @@ function renderStateView(stateSlug) {
           }">
             <strong>${item.clfName}</strong>
             <div class="shared-clf-meta">District: ${item.district}</div>
-            <div class="shared-clf-meta">Mapped partners: ${item.partners.join(", ")}</div>
+            <div class="shared-clf-meta">${item.partners.length} partners: ${item.partners.join(", ")}</div>
           </button>`
         )
         .join("")
-    : `<div class="empty-state-card">No CLFs are currently shared across multiple partners for this selection.</div>`;
+    : `<div class="empty-state-card">No hotspot CLFs with three or more partners are present for this selection.</div>`;
 
   els.sharedDirectory.querySelectorAll("[data-clf]").forEach((button) => {
     button.addEventListener("click", () => {
@@ -481,7 +485,7 @@ function renderStateView(stateSlug) {
     : baseRows;
   const focusedGeoDistrictStats = selectedPartner
     ? new Map(
-        buildDistrictStats(geoMapRows, sharedClfs).map((item) => [item.district, item])
+        buildDistrictStats(geoMapRows, hotspotClfs, totalClfsInView).map((item) => [item.district, item])
       )
     : null;
   const geoDistrictStats = selectedPartner
@@ -491,6 +495,7 @@ function renderStateView(stateSlug) {
           ? {
               ...districtItem,
               engagedClfs: focusedDistrict.engagedClfs,
+              engagementShare: focusedDistrict.engagementShare,
               notEngagedClfs: Math.max(
                 0,
                 districtItem.totalClfs - focusedDistrict.engagedClfs
@@ -507,7 +512,7 @@ function renderStateView(stateSlug) {
     containerId: "geographic-map",
     crosswalkRows: dashboardData.crosswalkRows,
     districtStats: geoDistrictStats,
-    mapType: "partner",
+    mapType: "engagement",
     selectedDistrict,
     selectedDistrictCallback: (district) => {
       toggleSelectedDistrict(stateSlug, district);
@@ -523,7 +528,7 @@ function renderStateView(stateSlug) {
     containerId: "clf-map",
     crosswalkRows: dashboardData.crosswalkRows,
     districtStats,
-    mapType: "clf",
+    mapType: "coverage",
     selectedDistrict,
     selectedDistrictCallback: (district) => {
       toggleSelectedDistrict(stateSlug, district);
@@ -534,8 +539,8 @@ function renderStateView(stateSlug) {
   });
 
   els.stateKpiNote.textContent = selectedPartner
-    ? `Partner focus: ${selectedPartner}. The first map shows how many CLFs are linked to this partner in each district, while district totals still reflect the full CLF base.`
-    : "The first map shows engaged CLFs by district. The second map shows total CLFs by district. Tooltips and district details compare engaged, total, and not engaged CLFs.";
+    ? `Partner focus: ${selectedPartner}. The first map shows each district's share of the full state CLF base linked to this partner, and the second map shows active partner coverage by district.`
+    : "The first map shows each district's share of the full state CLF base that is engaged. The second map shows the number of active partners by district, with hotspot panels highlighting CLFs linked to three or more partners.";
 
 }
 
