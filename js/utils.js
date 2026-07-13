@@ -1,5 +1,53 @@
 import { GEOJSON_PROPERTY_CANDIDATES } from "./config.js";
 
+const PARTNER_NAME_ALIASES = new Map([
+  ["buzzworthy ventures", "Buzzworthy Ventures"],
+  ["c3", "Centre for Catalysing Change (C3)"],
+  ["centre for catalysing change (c3)", "Centre for Catalysing Change (C3)"],
+  ["development alternatives", "Development Alternatives"],
+  ["gdi partners", "GDi Partners"],
+  ["gram vikas", "Gram Vikas Trust"],
+  ["gram vikas trust", "Gram Vikas Trust"],
+  ["harsha trust", "Harsha Trust"],
+  ["imago", "IMAGO Global Grassroots"],
+  ["imago global grassroots", "IMAGO Global Grassroots"],
+  ["industree", "Industree Foundation"],
+  ["industree foundation", "Industree Foundation"],
+  ["leap 300", "Leap 300 (Patthana)"],
+  ["leap 300 (patthana)", "Leap 300 (Patthana)"],
+  ["microsave", "Microsave Consulting (MSC)"],
+  ["microsave consulting (msc)", "Microsave Consulting (MSC)"],
+  ["nudge", "The Nudge Foundation"],
+  ["the nudge foundation", "The Nudge Foundation"],
+  ["palladium", "Palladium India"],
+  ["palladium india", "Palladium India"],
+  ["pci", "Project Concern International (PCI), Global, India"],
+  [
+    "project concern international (pci) global india",
+    "Project Concern International (PCI), Global, India",
+  ],
+  ["pradan", "Professional Assistance for Development Action (PRADAN)"],
+  [
+    "professional assistance for development action (pradan)",
+    "Professional Assistance for Development Action (PRADAN)",
+  ],
+  ["rcrc", "Responsible Coalition for Resilient Communities (RCRC)"],
+  [
+    "responsible coalition for resilient communities (rcrc)",
+    "Responsible Coalition for Resilient Communities (RCRC)",
+  ],
+  ["sa dhan", "Sa-Dhan"],
+  ["srijan", "Self Reliant Initiatives through Joint Action (SRIJAN)"],
+  [
+    "self reliant initiatives through joint action (srijan)",
+    "Self Reliant Initiatives through Joint Action (SRIJAN)",
+  ],
+  ["syngenta foundation (sfi)", "Syngenta Foundation India (SFI)"],
+  ["syngenta foundation india (sfi)", "Syngenta Foundation India (SFI)"],
+  ["trif", "Transform Rural India Foundation (TRIF)"],
+  ["transform rural india foundation (trif)", "Transform Rural India Foundation (TRIF)"],
+]);
+
 export function normalizeString(value) {
   return String(value || "")
     .trim()
@@ -36,7 +84,19 @@ export function displayClfName(value) {
 }
 
 export function displayPartner(value) {
-  return cleanCsvValue(value) || "Not currently linked to partner in dataset";
+  const cleaned = cleanCsvValue(value);
+  if (!cleaned) {
+    return "Not currently linked to partner in dataset";
+  }
+  return PARTNER_NAME_ALIASES.get(normalizeString(cleaned)) || cleaned;
+}
+
+export function canonicalizePartnerName(value) {
+  const cleaned = cleanCsvValue(value);
+  if (!cleaned) {
+    return "";
+  }
+  return PARTNER_NAME_ALIASES.get(normalizeString(cleaned)) || cleaned;
 }
 
 export function deterministicClfId({ state, district, block, clfName }) {
