@@ -68,12 +68,20 @@ export const CLF_CONCENTRATION_BUCKETS = [
   { label: "40+ CLFs", min: 41, max: Infinity, color: MAP_COLORS.clfReach[4] },
 ];
 
+export const ENGAGEMENT_SHARE_BUCKETS = [
+  { label: "0%", min: 0, max: 0, color: MAP_COLORS.geoReach[0] },
+  { label: ">0% to 2%", min: 0.0001, max: 2, color: MAP_COLORS.geoReach[1] },
+  { label: ">2% to 5%", min: 2.0001, max: 5, color: MAP_COLORS.geoReach[2] },
+  { label: ">5% to 10%", min: 5.0001, max: 10, color: MAP_COLORS.geoReach[3] },
+  { label: ">10% of state CLFs", min: 10.0001, max: Infinity, color: MAP_COLORS.geoReach[4] },
+];
+
 export const PARTNER_BUCKETS = [
-  { label: "0 engaged CLFs", min: 0, max: 0, color: MAP_COLORS.geoReach[0] },
-  { label: "1–5 engaged CLFs", min: 1, max: 5, color: MAP_COLORS.geoReach[1] },
-  { label: "6–10 engaged CLFs", min: 6, max: 10, color: MAP_COLORS.geoReach[2] },
-  { label: "11–20 engaged CLFs", min: 11, max: 20, color: MAP_COLORS.geoReach[3] },
-  { label: "21+ engaged CLFs", min: 21, max: Infinity, color: MAP_COLORS.geoReach[4] },
+  { label: "No active partner in dataset", min: 0, max: 0, color: MAP_COLORS.geoReach[0] },
+  { label: "1 Partner", min: 1, max: 1, color: MAP_COLORS.geoReach[1] },
+  { label: "2 Partners", min: 2, max: 2, color: MAP_COLORS.geoReach[2] },
+  { label: "3 Partners", min: 3, max: 3, color: MAP_COLORS.geoReach[3] },
+  { label: "4+ Partners", min: 4, max: Infinity, color: MAP_COLORS.geoReach[4] },
 ];
 
 export const REQUIRED_STATE_COLUMNS = [
