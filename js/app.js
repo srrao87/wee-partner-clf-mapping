@@ -63,7 +63,6 @@ const els = {
   stateFilterBar: document.getElementById("state-filter-bar"),
   stateKpis: document.getElementById("state-kpis"),
   stateKpiNote: document.getElementById("state-kpi-note"),
-  partnerDirectory: document.getElementById("partner-directory"),
   hotspotList: document.getElementById("hotspot-list"),
   sharedDirectory: document.getElementById("shared-clf-directory"),
   districtSummary: document.getElementById("district-details-summary"),
@@ -349,36 +348,6 @@ function renderStateView(stateSlug) {
   ].join("");
 
   els.stateKpiNote.textContent = "";
-
-  const partnerDirectoryRows = [...groupBy(activePartnerRows, (row) => row.partner_organization).entries()]
-    .map(([partner, partnerRows]) => ({
-      partner,
-      districts: new Set(partnerRows.map((row) => row.district)).size,
-      clfs: countUniqueClfs(partnerRows),
-    }))
-    .sort((a, b) => a.partner.localeCompare(b.partner));
-
-  els.partnerDirectory.innerHTML = partnerDirectoryRows.length
-    ? partnerDirectoryRows
-        .map(
-          (item) => `
-          <button class="directory-item ${selectedPartner === item.partner ? "active" : ""}" type="button" data-partner="${item.partner}" aria-pressed="${
-            selectedPartner === item.partner
-          }">
-            <strong>${item.partner}</strong>
-            <div class="directory-meta">${formatNumber(item.districts)} districts covered | ${formatNumber(item.clfs)} CLFs engaged</div>
-          </button>`
-        )
-        .join("")
-    : `<div class="empty-state-card">No partner engagement recorded for this selection.</div>`;
-
-  els.partnerDirectory.querySelectorAll("[data-partner]").forEach((button) => {
-    button.addEventListener("click", () => {
-      toggleSelectedPartner(stateSlug, button.dataset.partner);
-      render();
-    });
-  });
-
   const hotspotDistricts = districtStats
     .filter((item) => item.hotspots > 0)
     .sort((a, b) => b.hotspots - a.hotspots || a.district.localeCompare(b.district));
