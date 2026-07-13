@@ -1,12 +1,14 @@
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 import {
   CLF_CONCENTRATION_BUCKETS,
+  ENGAGEMENT_SHARE_BUCKETS,
   FILE_PATHS,
   MAP_COLORS,
   PARTNER_BUCKETS,
 } from "./config.js";
 import {
   formatNumber,
+  formatPercent,
   getDistrictNameFromFeature,
   getStateNameFromFeature,
   normalizeString,
@@ -275,10 +277,19 @@ export async function renderStateDistrictMap({
       fillAccessor: (feature) => {
         const districtName = getDistrictNameFromFeature(feature);
         const stat = statByGeoDistrict.get(districtName);
-        const value = mapType === "partner" ? stat?.engagedClfs || 0 : stat?.clfs || 0;
+        const value =
+          mapType === "engagement"
+            ? (stat?.engagementShare || 0) * 100
+            : mapType === "coverage"
+              ? stat?.activePartners || 0
+              : stat?.clfs || 0;
         return colorByBuckets(
           value,
-          mapType === "partner" ? PARTNER_BUCKETS : CLF_CONCENTRATION_BUCKETS,
+          mapType === "engagement"
+            ? ENGAGEMENT_SHARE_BUCKETS
+            : mapType === "coverage"
+              ? PARTNER_BUCKETS
+              : CLF_CONCENTRATION_BUCKETS,
           "#e7e1d1"
         );
       },
@@ -306,12 +317,22 @@ export async function renderStateDistrictMap({
         const engagedValue = stat?.engagedClfs || 0;
         const totalValue = stat?.totalClfs ?? stat?.clfs ?? 0;
         const notEngagedValue = stat?.notEngagedClfs ?? Math.max(0, totalValue - engagedValue);
-        if (mapType === "partner") {
+        if (mapType === "engagement") {
           return `<strong>${districtName}</strong><br>Engaged CLFs: ${formatNumber(
             engagedValue
-          )}<br>Total CLFs: ${formatNumber(totalValue)}<br>Not Engaged CLFs: ${formatNumber(
-            notEngagedValue
+          )}<br>Share of state CLFs: ${formatPercent(
+            stat?.engagementShare || 0,
+            1
+          )}<br>Total CLFs in district: ${formatNumber(
+            totalValue
           )}<br>Active Partners: ${formatNumber(stat?.activePartners || 0)}`;
+        }
+        if (mapType === "coverage") {
+          return `<strong>${districtName}</strong><br>Active Partners: ${formatNumber(
+            stat?.activePartners || 0
+          )}<br>Engaged CLFs: ${formatNumber(
+            engagedValue
+          )}<br>Hotspot CLFs (3+ partners): ${formatNumber(stat?.hotspots || 0)}`;
         }
         return `<strong>${districtName}</strong><br>Total CLFs: ${formatNumber(
           totalValue
@@ -330,8 +351,16 @@ export async function renderStateDistrictMap({
 
     renderLegend(
       container,
-      mapType === "partner" ? "Engaged CLFs" : "Total CLFs",
-      mapType === "partner" ? PARTNER_BUCKETS : CLF_CONCENTRATION_BUCKETS
+      mapType === "engagement"
+        ? "Share of state CLFs engaged"
+        : mapType === "coverage"
+          ? "Active partners"
+          : "Total CLFs",
+      mapType === "engagement"
+        ? ENGAGEMENT_SHARE_BUCKETS
+        : mapType === "coverage"
+          ? PARTNER_BUCKETS
+          : CLF_CONCENTRATION_BUCKETS
     );
   } catch (error) {
     console.warn(`District map for ${slug} could not be rendered.`, error);
