@@ -40,9 +40,9 @@ import {
   displayPartner,
   displayProject,
   formatNumber,
-  formatPercent,
   groupBy,
   hasActiveFilters,
+  normalizeString,
   sortAlpha,
   uniqueValues,
 } from "./utils.js";
@@ -82,6 +82,15 @@ function rowsWithPartners(rows) {
   return rows.filter((row) => cleanCsvValue(row.partner_organization));
 }
 
+function countUniquePartners(rows) {
+  return new Set(
+    rows
+      .map((row) => cleanCsvValue(row.partner_organization))
+      .filter(Boolean)
+      .map((value) => normalizeString(value))
+  ).size;
+}
+
 function getStateSummaryRows(allRows, metadata) {
   return metadata.map((stateMeta) => {
     const stateRows = allRows.filter((row) => row.state_slug === stateMeta.state_slug);
@@ -91,9 +100,7 @@ function getStateSummaryRows(allRows, metadata) {
       state_slug: stateMeta.state_slug,
       districtsCovered: new Set(engagedRows.map((row) => `${row.state_slug}::${row.district}`))
         .size,
-      partners: new Set(
-        engagedRows.map((row) => row.partner_organization).filter(Boolean)
-      ).size,
+      partners: countUniquePartners(engagedRows),
       clfs: countUniqueClfs(stateRows),
     };
   });
@@ -149,7 +156,7 @@ function renderHome(allRows) {
     }),
     createKpiCard({
       label: "Partner Organizations",
-      value: new Set(engagedRows.map((row) => row.partner_organization)).size,
+      value: countUniquePartners(engagedRows),
     }),
     createKpiCard({
       label: "Cluster Level Federations (CLFs)",
@@ -306,7 +313,6 @@ function renderStateView(stateSlug) {
   const activePartnerRows = rowsWithPartners(baseRows);
   const totalClfsInView = countUniqueClfs(baseRows);
   const engagedClfsInView = countUniqueClfs(activePartnerRows);
-  const engagementRate = totalClfsInView ? engagedClfsInView / totalClfsInView : 0;
   const hotspotClfs = getSharedClfGroups(baseRows, 3);
   const districtStats = buildDistrictStats(baseRows, hotspotClfs, totalClfsInView);
 
@@ -324,14 +330,13 @@ function renderStateView(stateSlug) {
     }),
     createKpiCard({
       label: "Active Partner Organizations",
-      value: new Set(activePartnerRows.map((row) => row.partner_organization)).size,
+      value: countUniquePartners(activePartnerRows),
       filtered: filterApplied,
     }),
     createKpiCard({
-      label: "CLF Engagement Rate",
-      value: engagementRate,
-      displayValue: formatPercent(engagementRate, 1),
-      meta: `${formatNumber(engagedClfsInView)} of ${formatNumber(totalClfsInView)} CLFs engaged`,
+      label: "Engaged CLFs",
+      value: engagedClfsInView,
+      meta: `${formatNumber(Math.max(0, totalClfsInView - engagedClfsInView))} not engaged`,
       filtered: filterApplied,
     }),
     createKpiCard({
