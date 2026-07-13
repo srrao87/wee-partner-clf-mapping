@@ -96,7 +96,7 @@ export function canonicalizePartnerName(value) {
   if (!cleaned) {
     return "";
   }
-  return PARTNER_NAME_ALIASES.get(normalizeString(cleaned)) || cleaned;
+  return PARTNER_NAME_ALIASES.get(normalizeString(cleaned)) || "";
 }
 
 export function deterministicClfId({ state, district, block, clfName }) {
